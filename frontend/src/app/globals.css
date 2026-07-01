@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #0B1929;
+  --navy-light: #132337;
+  --gold: #C9A84C;
+  --gold-light: #E2C06E;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', system-ui, sans-serif; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0B1929; }
+  ::-webkit-scrollbar-thumb { background: #C9A84C44; border-radius: 3px; }
+}
+
+@layer components {
+  .card {
+    @apply bg-[#132337] rounded-xl border border-[#C9A84C22] p-5;
+  }
+  .stat-label {
+    @apply text-xs text-slate-400 uppercase tracking-widest font-medium;
+  }
+  .stat-value {
+    @apply text-2xl font-bold text-white;
+  }
+  .badge-buy {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-green-900/40 text-green-400 border border-green-700/40;
+  }
+  .badge-watch {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-900/40 text-amber-400 border border-amber-700/40;
+  }
+  .badge-over {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-900/40 text-red-400 border border-red-700/40;
+  }
+}
