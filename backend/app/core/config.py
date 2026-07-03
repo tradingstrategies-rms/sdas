@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "SDAS"
     DEBUG: bool = False
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "https://your-vercel-domain.vercel.app"]
+    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000"]
 
     # Firebase
     FIREBASE_PROJECT_ID: str
@@ -24,19 +24,22 @@ class Settings(BaseSettings):
     # SendGrid
     SENDGRID_API_KEY: str
     EMAIL_FROM: str = "noreply@yourdomain.com"
-    EMAIL_TO: str  # recipient email for daily signals
+    EMAIL_TO: str
 
-    # STI index ticker (for market correction bonus)
+    # Scheduler
+    SCHEDULER_SECRET: str = "change-me-in-production"
+
+    # STI index ticker
     STI_TICKER: str = "^STI"
 
     # Screener defaults
-    MIN_DIVIDEND_YIELD: float = 4.0      # %
+    MIN_DIVIDEND_YIELD: float = 4.0
     BUY_NOW_SCORE: int = 13
     WATCHLIST_SCORE: int = 9
-    BUY_NOW_AMOUNT: float = 750.0        # SGD
-    WATCHLIST_AMOUNT: float = 500.0      # SGD
-    MAX_POSITION_PCT: float = 15.0       # % of portfolio
-    CASH_RESERVE_PCT: float = 20.0       # % of portfolio
+    BUY_NOW_AMOUNT: float = 750.0
+    WATCHLIST_AMOUNT: float = 500.0
+    MAX_POSITION_PCT: float = 15.0
+    CASH_RESERVE_PCT: float = 20.0
 
     # Screener schedule (SGT = UTC+8)
     SCREENER_HOUR_SGT: int = 19
@@ -54,6 +57,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
 
 settings = Settings()
