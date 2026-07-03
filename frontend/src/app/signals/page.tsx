@@ -40,7 +40,7 @@ export default function SignalsPage() {
           </p>
         </div>
         <button
-          onClick={() => screenerMutation.mutate(true)}
+          onClick={() => screenerMutation.mutate()}
           disabled={screenerMutation.isPending}
           className="flex items-center gap-2 px-4 py-2 bg-[#C9A84C] hover:bg-[#E2C06E] disabled:opacity-50 text-black text-sm font-semibold rounded-lg transition-colors"
         >

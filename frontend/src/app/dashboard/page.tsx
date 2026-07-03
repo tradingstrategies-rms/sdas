@@ -27,7 +27,7 @@ export default function DashboardPage() {
             {latestDate && <span className="ml-2 text-slate-600">· Last run: {latestDate}</span>}
           </p>
         </div>
-        <button onClick={() => screenerMutation.mutate(true)} disabled={screenerMutation.isPending}
+        <button onClick={() => screenerMutation.mutate()} disabled={screenerMutation.isPending}
           className="flex items-center gap-2 px-4 py-2 bg-[#C9A84C] hover:bg-[#E2C06E] disabled:opacity-50 text-black text-sm font-semibold rounded-lg transition-colors">
           {screenerMutation.isPending ? <RefreshCw size={14} className="animate-spin" /> : <Clock size={14} />}
           {screenerMutation.isPending ? 'Running...' : 'Run Screener Now'}

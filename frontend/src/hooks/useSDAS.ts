@@ -82,7 +82,7 @@ export function useAddStock() {
 export function useRunScreener() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (sendEmail = true) => screenerApi.run(sendEmail),
+    mutationFn: () => screenerApi.run(true),
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['signals'] })
       toast.success(
