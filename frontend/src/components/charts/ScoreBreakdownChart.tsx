@@ -56,10 +56,11 @@ export function ScoreBreakdownChart({ breakdown, total }: ScoreBreakdownChartPro
           <Tooltip
             contentStyle={{ background: '#132337', border: '1px solid #C9A84C33', borderRadius: 6, fontSize: 12 }}
             labelStyle={{ color: '#C9A84C' }}
-            itemStyle={{ color: '#fff' }}
-            formatter={(v: number, _: string, props: { payload: { max: number } }) =>
-              [`${v} / ${props.payload.max}`, 'Score']
-            }
+            itemStyle={{ color: '#fff' }}        
+			formatter={(v, _name, item) => {
+				const max = (item.payload as { max?: number })?.max;
+				return [`${v}${max !== undefined ? ` / ${max}` : ''}`, 'Score'];
+			}}
           />
           <Bar dataKey="score" radius={[3, 3, 0, 0]}>
             {data.map((entry, i) => (
