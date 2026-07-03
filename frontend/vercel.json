@@ -2,12 +2,5 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "installCommand": "npm install",
-  "framework": "nextjs",
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@sdas-api-url",
-    "NEXT_PUBLIC_FIREBASE_API_KEY": "@sdas-firebase-api-key",
-    "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN": "@sdas-firebase-auth-domain",
-    "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "@sdas-firebase-project-id",
-    "NEXT_PUBLIC_FIREBASE_APP_ID": "@sdas-firebase-app-id"
-  }
+  "framework": "nextjs"
 }
