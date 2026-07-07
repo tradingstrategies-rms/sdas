@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     EMAIL_TO: str = ""
 
     SCHEDULER_SECRET: str = "change-me"
+    ALPHA_VANTAGE_KEY: str = ""
     STI_TICKER: str = "^STI"
 
     MIN_DIVIDEND_YIELD: float = 4.0
