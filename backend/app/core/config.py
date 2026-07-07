@@ -15,16 +15,16 @@ class Settings(BaseSettings):
 
     # Firebase
     FIREBASE_PROJECT_ID: str
-    FIREBASE_PRIVATE_KEY_ID: str
+    FIREBASE_PRIVATE_KEY: str = ""
     FIREBASE_PRIVATE_KEY: str
     FIREBASE_CLIENT_EMAIL: str
     FIREBASE_CLIENT_ID: str
     FIREBASE_CLIENT_CERT_URL: str
 
     # SendGrid
-    SENDGRID_API_KEY: str
+    SENDGRID_API_KEY: str = ""
     EMAIL_FROM: str = "noreply@yourdomain.com"
-    EMAIL_TO: str
+    EMAIL_TO: str = ""
 
     # Scheduler
     SCHEDULER_SECRET: str = "change-me-in-production"
