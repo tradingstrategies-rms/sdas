@@ -24,6 +24,9 @@ def _render_html(run_result: Dict[str, Any]) -> str:
     watchlist_items = [r for r in results if r["signal"] == "WATCHLIST"]
     overvalued = [r for r in results if r["signal"] == "OVERVALUED"]
 
+    # Group all results by market
+    markets = sorted(set(r.get("market", "SGX") for r in results))
+
     def stock_row(r: Dict, color: str, show_amount: bool = True) -> str:
         amount_html = f"<td><strong>SGD {r['amount']:.0f}</strong></td>" if show_amount else ""
         return f"""
@@ -35,11 +38,19 @@ def _render_html(run_result: Dict[str, Any]) -> str:
           {amount_html if show_amount else '<td></td>'}
         </tr>"""
 
-    buy_rows = "".join(stock_row(r, "#16a34a") for r in buy_now) if buy_now else \
-        "<tr><td colspan='4' style='color:#999;padding:8px'>No BUY NOW signals today</td></tr>"
+def market_section(signal_list, color):
+        if not signal_list:
+            return "<tr><td colspan='4' style='color:#999;padding:8px'>None today</td></tr>"
+        rows = ""
+        for market in markets:
+            market_stocks = [r for r in signal_list if r.get("market", "SGX") == market]
+            if market_stocks:
+                rows += f"<tr><td colspan='4' style='padding:6px 0 2px;font-size:11px;color:#999;text-transform:uppercase;letter-spacing:1px'>{market}</td></tr>"
+                rows += "".join(stock_row(r, color) for r in market_stocks)
+        return rows
 
-    watch_rows = "".join(stock_row(r, "#d97706") for r in watchlist_items) if watchlist_items else \
-        "<tr><td colspan='4' style='color:#999;padding:8px'>No WATCHLIST signals today</td></tr>"
+    buy_rows = market_section(buy_now, "#16a34a")
+    watch_rows = market_section(watchlist_items, "#d97706")
 
     ov_rows = ""
     for r in overvalued:

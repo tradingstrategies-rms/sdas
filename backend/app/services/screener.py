@@ -39,7 +39,9 @@ class ScreenerService:
 
         results: List[Dict] = []
 
-        for ticker in settings.WATCHLIST_TICKERS:
+        all_stocks = stock_repo.get_all_active()
+	tickers = [s["ticker"] for s in all_stocks]
+	for ticker in tickers:
             logger.info("Processing %s...", ticker)
 
             # Fetch market data
@@ -54,12 +56,13 @@ class ScreenerService:
             company_name = meta.get("companyName", ticker)
 
             # Score
-            score, signal, amount, notes, _ = scoring_engine.score_stock(
-                data=data,
-                category=category,
-                sti_correction_pct=sti_correction,
-                min_yield=settings.MIN_DIVIDEND_YIELD,
-            )
+            min_yield = meta.get("minYield", settings.MIN_DIVIDEND_YIELD)
+	   score, signal, amount, notes, _ = scoring_engine.score_stock(
+    	   	data=data,
+    		category=category,
+    		sti_correction_pct=sti_correction,
+   		 min_yield=min_yield,
+	   )
 
             # Save daily price record
             price_repo.upsert(data)
