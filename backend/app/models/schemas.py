@@ -14,8 +14,8 @@ class Stock(BaseModel):
     category: Literal["Bank", "REIT", "Infrastructure", "Equity"]
     market: str = "SGX"
     currency: str = "SGD"
-    minYield: float = 4.0
     targetYield: float
+    minYield: float = 4.0
     active: bool = True
 
 
