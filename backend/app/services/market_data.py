@@ -64,11 +64,19 @@ class MarketDataService:
             rsi14 = self._calc_rsi(close, 14)
 
             # Fundamentals — try multiple field names
-            div_yield = (
-                _safe_float(info.get("dividendYield") or
-                            info.get("yield") or
-                            info.get("trailingAnnualDividendYield") or 0)
-            ) * 100
+	    # Fundamentals — Yahoo Finance returns dividendYield inconsistently
+            # Sometimes it's already a percentage (4.84), sometimes a decimal (0.0484)
+            # We detect which format and normalise to percentage
+            raw_yield = _safe_float(
+                info.get("dividendYield") or
+                info.get("trailingAnnualDividendYield") or 0
+            )
+            # If value is greater than 1, it's already in percent form (e.g. 4.84)
+            # If value is less than 1, it's in decimal form (e.g. 0.0484)
+            if raw_yield > 1:
+                div_yield = raw_yield          # already percent — use as-is
+            else:
+                div_yield = raw_yield * 100    # convert decimal to percent
 
             pb_ratio = _safe_float(
                 info.get("priceToBook") or info.get("pb"), default=0
