@@ -4,14 +4,13 @@ from pydantic import BaseModel, Field
 from typing import Optional, Literal
 from datetime import date, datetime
 
-
 # ── Stock ──────────────────────────────────────────────────────────────────────
 
 class Stock(BaseModel):
     ticker: str
     companyName: str
     sector: str
-    category: Literal["Bank", "REIT", "Infrastructure", "Equity"]
+    category: str
     market: str = "SGX"
     currency: str = "SGD"
     targetYield: float

@@ -1,10 +1,5 @@
 """
-Screener Service — orchestrates the daily screening run:
-1. Fetch market data for all watchlist tickers
-2. Calculate scores
-3. Generate signals
-4. Save to Firestore
-5. Return results for email
+Screener Service — orchestrates the daily screening run.
 """
 
 import logging
@@ -24,50 +19,40 @@ logger = logging.getLogger(__name__)
 class ScreenerService:
 
     def run(self) -> Dict[str, Any]:
-        """
-        Full screening run. Returns summary dict.
-        """
         today = datetime.now().strftime("%Y-%m-%d")
         logger.info("=== SDAS Screening Run — %s ===", today)
 
-        # Get STI correction for market bonus
         sti_correction = market_data_service.get_sti_correction(settings.STI_TICKER)
         logger.info("STI correction from 52w high: %.1f%%", sti_correction)
 
-        # Load stock metadata from Firestore (for category etc.)
-        stocks_meta = {s["ticker"]: s for s in stock_repo.get_all_active()}
+        all_stocks = stock_repo.get_all_active()
+        stocks_meta = {s["ticker"]: s for s in all_stocks}
+        tickers = [s["ticker"] for s in all_stocks]
 
         results: List[Dict] = []
 
-        all_stocks = stock_repo.get_all_active()
-	tickers = [s["ticker"] for s in all_stocks]
-	for ticker in tickers:
+        for ticker in tickers:
             logger.info("Processing %s...", ticker)
 
-            # Fetch market data
             data = market_data_service.get_stock_data(ticker)
             if not data:
                 logger.warning("Skipping %s — no data", ticker)
                 continue
 
-            # Look up category (fallback to Equity)
             meta = stocks_meta.get(ticker, {})
             category = meta.get("category", "Equity")
             company_name = meta.get("companyName", ticker)
-
-            # Score
             min_yield = meta.get("minYield", settings.MIN_DIVIDEND_YIELD)
-	   score, signal, amount, notes, _ = scoring_engine.score_stock(
-    	   	data=data,
-    		category=category,
-    		sti_correction_pct=sti_correction,
-   		 min_yield=min_yield,
-	   )
 
-            # Save daily price record
+            score, signal, amount, notes, _ = scoring_engine.score_stock(
+                data=data,
+                category=category,
+                sti_correction_pct=sti_correction,
+                min_yield=min_yield,
+            )
+
             price_repo.upsert(data)
 
-            # Save signal
             signal_doc = {
                 "date": today,
                 "ticker": ticker,
@@ -78,6 +63,7 @@ class ScreenerService:
                 "notes": notes,
                 "companyName": company_name,
                 "category": category,
+                "market": meta.get("market", "SGX"),
             }
             signal_repo.upsert(signal_doc)
 
