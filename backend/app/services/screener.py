@@ -37,7 +37,7 @@ class ScreenerService:
             tickers = [s["ticker"] for s in all_stocks]
             logger.info("Found %d stocks in Firestore", len(tickers))
         except Exception as e:
-            logger.error("Failed to load stocks from Firestore: %s", e)
+            logger.error("Failed to load stocks: %s", e)
             tickers = settings.WATCHLIST_TICKERS
             stocks_meta = {}
 
@@ -70,7 +70,7 @@ class ScreenerService:
                 company_name = meta.get("companyName", ticker)
                 min_yield = float(meta.get("minYield", settings.MIN_DIVIDEND_YIELD))
 
-                score, signal, amount, notes, _ = scoring_engine.score_stock(
+                score, signal, amount, notes, breakdown = scoring_engine.score_stock(
                     data=data,
                     category=category,
                     sti_correction_pct=sti_correction,
@@ -90,9 +90,14 @@ class ScreenerService:
                     "amount": amount,
                     "yield": data["dividendYield"],
                     "notes": notes,
+                    "breakdown": breakdown.to_notes(),
                     "companyName": company_name,
                     "category": category,
                     "market": meta.get("market", "SGX"),
+                    "price": data["price"],
+                    "sma200": data["sma200"],
+                    "rsi14": data["rsi14"],
+                    "drawdownPercent": data["drawdownPercent"],
                 }
 
                 try:
@@ -102,7 +107,7 @@ class ScreenerService:
 
                 results.append(signal_doc)
                 logger.info(
-                    "%s → score=%d signal=%s yield=%.1f%%",
+                    "%s score=%d signal=%s yield=%.1f%%",
                     ticker, score, signal, data["dividendYield"]
                 )
 
