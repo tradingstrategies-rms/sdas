@@ -59,3 +59,56 @@ export interface BacktestResult {
   portfolioHistory: { date: string; value: number }[]
   trades: object[]
 }
+
+export interface Transaction {
+  id: string
+  ticker: string
+  companyName: string
+  date: string
+  price: number
+  quantity: number
+  commission: number
+  currency: string
+  market: string
+  category: string
+  broker: string
+  notes: string
+  type: string
+  createdAt: string
+}
+
+export interface Holding {
+  ticker: string
+  companyName: string
+  category: string
+  market: string
+  currency: string
+  totalShares: number
+  totalCost: number
+  avgCostPrice: number
+  currentPrice: number
+  marketValue: number
+  unrealisedPL: number
+  unrealisedPLPct: number
+  dividendYield: number
+  annualDividend: number
+  monthlyDividend: number
+  yieldOnCost: number
+  firstBuyDate: string
+  lastBuyDate: string
+  sector: string
+}
+
+export interface PortfolioData {
+  totalInvested: number
+  marketValue: number
+  unrealisedPL: number
+  annualDividend: number
+  monthlyDividend: number
+  yieldOnCost: number
+  cashReserve: number
+  progressPct: number
+  holdingsCount: number
+  targetMonthly: number
+  holdings: Holding[]
+}

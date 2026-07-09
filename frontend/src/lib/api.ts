@@ -39,3 +39,12 @@ export const screenerApi = {
 export const backtestApi = {
   run: (params: object) => api.post('/api/v1/backtest/run', params).then(r => r.data),
 }
+// ── Transactions ───────────────────────────────────────────────────────────────
+export const transactionsApi = {
+  list: () => api.get('/api/v1/transactions/').then(r => r.data),
+  holdings: () => api.get('/api/v1/transactions/holdings').then(r => r.data),
+  portfolio: () => api.get('/api/v1/transactions/portfolio').then(r => r.data),
+  add: (data: object) => api.post('/api/v1/transactions/', data).then(r => r.data),
+  remove: (id: string) => api.delete(`/api/v1/transactions/${id}`).then(r => r.data),
+  byTicker: (ticker: string) => api.get(`/api/v1/transactions/${ticker}`).then(r => r.data),
+}
